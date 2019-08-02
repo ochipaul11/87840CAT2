@@ -17,36 +17,16 @@ public class RestTesting implements CommandLineRunner {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<List<University>> response = restTemplate.exchange("http://localhost:8080/universities", HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<University>>() {
-                });
+        System.err.println("Creating student registration post-------------");
+        Student newStudent = new Student((long) 4,"Paul Okeyo",87840);
+        Student createdStudent = restTemplate.postForObject("http://10.51.10.111:1000/registrations", newStudent, Student.class);
+        System.out.println(createdStudent.toString());
 
-        System.err.println("Find All Universities -------------");
-        List<University> univerities = response.getBody();
-        for (University university : univerities) {
-
-            System.out.println(university.toString());
-        }
-
-        System.err.println("Find one()Get-------------");
-        University university = restTemplate.getForObject("http://localhost:8080/universities/2", University.class);
-        System.out.println(university.toString());
-
-        System.err.println("Creating university post-------------");
-        University newuniversity1 = new University("Strathmore", "Ole", 400);
-        University createdUniversity = restTemplate.postForObject("http://localhost:8080/universities/", newuniversity1, University.class);
-        System.out.println(createdUniversity.toString());
-
-        System.err.println("Creating course-------------");
-        String createCourse = "http://localhost:8080/universities/" + createdUniversity.getId() + "/course";
-        Course newCourse = new Course("Bsc Computer Engineering");
-        Course createdCourse = restTemplate.postForObject(createCourse, newCourse, Course.class);
-        System.out.println(createdCourse.toString());
-
-        System.err.println("Updating course-----------");
-        String updateCourse = "http://localhost:8080/universities/19/course";
-        Course newUpdate= new Course("Mathematics");
-        Course updated = restTemplate.patchForObject("http://localhost:8080/universities/19/course",newUpdate,Course.class);
+        System.err.println("Creating student registration post-------------");
+        Unit createdUnit= new Unit((long) 2,"Application programming");
+        String newUnit = ("http://10.51.10.111:1000/" + createdUnit.getId() + "/enroll/"+ createdStudent.getId());
+        Unit createUnit = restTemplate.postForObject(newUnit,createdUnit,Unit.class);
+        System.out.println(createdStudent.toString());
 
 
 
